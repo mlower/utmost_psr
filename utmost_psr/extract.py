@@ -44,12 +44,16 @@ def get_psr_params(psr_names, spectral_index=-1.8, data_dir="Jankowski2019"):
     Jankowski_table = pd.read_csv(filename, delimiter=";")
 
     # Get pulsar DECJ + remaning fluxes & W50 values from psrcat:
-    psr_params = ["JNAME" ,"RAJ", "DECJ", "P0", "S400", "S1400", "W50"]
+    psr_params = ["JNAME" ,"RAJ", "DECJ", "GL", "GB", "P0", "S400", "S1400",
+        "W50"]
     query = QueryATNF(psrs=psr_names, params=psr_params)
 
     # Get fluxes & widths:
     p0 = []
+    raj = []
     decj = []
+    Gl = []
+    Gb = []
     flux = []
     w50 = []
     for PSR in psr_names:
@@ -59,7 +63,10 @@ def get_psr_params(psr_names, spectral_index=-1.8, data_dir="Jankowski2019"):
             # Retrieve P0 & DECJ from psrcat query:
             query_position = np.argwhere(query["JNAME"] == PSR)[0][0]
             p0.append(query["P0"][query_position])
+            raj.append(query["RAJ"][query_position])
             decj.append(query["DECJ"][query_position])
+            Gl.append(query["GL"][query_position])
+            Gb.append(query["GB"][query_position])
 
             # Find pulsar position in Table & append values to arrays:
             tab_position = np.argwhere(
@@ -72,7 +79,10 @@ def get_psr_params(psr_names, spectral_index=-1.8, data_dir="Jankowski2019"):
             # Retrieve DECJ from psrcat query:
             query_position = np.argwhere(query["JNAME"] == PSR)[0][0]
             p0.append(query["P0"][query_position])
+            raj.append(query["RAJ"][query_position])
             decj.append(query["DECJ"][query_position])
+            Gl.append(query["GL"][query_position])
+            Gb.append(query["GB"][query_position])
 
             # Retreive S843 scaled from either S400 or S1400
             S400 = query["S400"][query_position]
@@ -100,7 +110,10 @@ def get_psr_params(psr_names, spectral_index=-1.8, data_dir="Jankowski2019"):
     psr_params = pd.DataFrame({
         "JNAME": psr_names,
         "P0": p0,
+        "RAJ": raj,
         "DECJ": decj,
+        "GL": Gl,
+        "GB": Gb,
         "Flux": flux,
         "W50": w50
         })

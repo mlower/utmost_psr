@@ -29,7 +29,7 @@ def UTMOST_NS_module_params():
 
 
 def radiometer_signal_to_noise(obs_params, flux_density, period, width,
-    t_int=300.0):
+    psr_Tsky, t_int=300.0):
     """
     Predicted signal to noise ratio from the radiometer equation: see Equation
     A1.21 in Kramer & Lorimer (2004).
@@ -45,6 +45,8 @@ def radiometer_signal_to_noise(obs_params, flux_density, period, width,
         Pulsar period [s]
     width: list, floats
         Pulsar width -- W50 [s]
+    psr_Tsky: list, floats
+        Sky temperature at pulsar positions (K)
     t_int: float, optional
         Observation length in seconds (default = 300 seconds)
 
@@ -55,7 +57,7 @@ def radiometer_signal_to_noise(obs_params, flux_density, period, width,
     """
 
     # System Equivalent Flux Density: Gain / T_sys
-    sefd = obs_params["Gain"] / obs_params["T_sys"]
+    sefd = obs_params["Gain"] / (obs_params["T_sys"] + psr_Tsky)
 
     # Pulsar duty cycle
     duty_cycle = np.sqrt((period - width)/width)

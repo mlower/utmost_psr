@@ -67,8 +67,6 @@ def period_vs_flux(period, snr, flux_density, thresh=10.):
     thresh_36 = np.argwhere(snr_36_cassette > thresh)
     thresh_66 = np.argwhere(snr_66_cassette > thresh)
 
-    print(np.shape(thresh_66))
-
     colours = cmr.take_cmap_colors("cmr.chroma_r", 4, (0.2, 0.85),
         return_hex=True)
 
